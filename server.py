@@ -88,7 +88,9 @@ def run_analysis():
             return
 
         df = pd.DataFrame(records)
-        df['timestamp'] = pd.to_datetime(df['date'], errors='coerce')
+        df['timestamp'] = pd.to_datetime(
+            df['date'] + ' ' + df['time'].str.replace(r'\s*(AM|PM).*', '', regex=True),
+            errors='coerce'
         df = df.dropna(subset=['mq2', 'mq135', 'temperature', 'humidity'])
         df = df[df['mq2'] > 0]  # filter zero-noise rows
 
